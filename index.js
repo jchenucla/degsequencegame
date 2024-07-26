@@ -4,10 +4,16 @@ document.getElementById('generate-btn').addEventListener('click', function() {
     generateGraph(degreeSequence);
 });
 
+document.getElementById('done-btn').addEventListener('click', function() {
+    checkDegreeSequence();
+});
+
 let selectedNode = null;
 let link;
 let node;
 let label;
+let nodes = [];
+let links = [];
 
 function generateGraph(degreeSequence) {
     const width = 800;
@@ -19,13 +25,14 @@ function generateGraph(degreeSequence) {
         .attr("width", width)
         .attr("height", height);
 
-    const nodes = degreeSequence.map((degree, index) => ({
+    nodes = degreeSequence.map((degree, index) => ({
         id: index,
         degree: degree,
-        originalDegree: degree // Keep the original degree for display
+        originalDegree: degree, // Keep the original degree for display
+        connections: 0 // Track the number of connections
     }));
 
-    const links = [];
+    links = [];
 
     const simulation = d3.forceSimulation(nodes)
         .force("link", d3.forceLink(links).id(d => d.id).distance(100))
@@ -103,18 +110,26 @@ function generateGraph(degreeSequence) {
             selectedNode = null;
             d3.select(this).attr("fill", "#4CAF50"); // Unselect the node
         } else {
-            // Create a link between selectedNode and clicked node
-            links.push({ source: selectedNode, target: d });
-            selectedNode = null;
+            if (selectedNode.connections < selectedNode.originalDegree && d.connections < d.originalDegree) {
+                // Create a link between selectedNode and clicked node
+                links.push({ source: selectedNode, target: d });
+                selectedNode.connections++;
+                d.connections++;
+                selectedNode = null;
 
-            // Update the visualization
-            updateLinks();
+                // Update the visualization
+                updateLinks();
 
-            simulation.force("link").links(links);
-            simulation.alpha(1).restart();
+                simulation.force("link").links(links);
+                simulation.alpha(1).restart();
 
-            // Reset node colors
-            d3.selectAll("circle").attr("fill", "#4CAF50");
+                // Reset node colors
+                d3.selectAll("circle").attr("fill", "#4CAF50");
+            } else {
+                alert("One of the nodes has reached its maximum connections.");
+                selectedNode = null;
+                d3.selectAll("circle").attr("fill", "#4CAF50");
+            }
         }
     }
 
@@ -136,4 +151,17 @@ function generateGraph(degreeSequence) {
     });
 
     updateLinks(); // Initialize link update to draw initial state
+}
+
+function checkDegreeSequence() {
+    const message = document.getElementById('message');
+    const allCorrect = nodes.every(node => node.connections === node.originalDegree);
+
+    if (allCorrect) {
+        message.textContent = "Degree sequence is completed.";
+        message.style.color = "green";
+    } else {
+        message.textContent = "Degree sequence is not completed. Please check the connections.";
+        message.style.color = "red";
+    }
 }
