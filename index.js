@@ -1,4 +1,4 @@
-document.getElementById('generate-btn').addEventListener('click', function() {
+document.getElementById('start-btn').addEventListener('click', function() {
     const degreeSequenceInput = "4,3,3,2,1";
     const degreeSequence = degreeSequenceInput.split(',').map(Number);
     generateGraph(degreeSequence);
