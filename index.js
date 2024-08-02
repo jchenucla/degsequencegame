@@ -1,7 +1,18 @@
+const degreeSequenceInput = "4,3,3,2,1";
+let degreeSequence = degreeSequenceInput.split(',').map(Number);
+let started = false;
+
 document.getElementById('start-btn').addEventListener('click', function() {
-    const degreeSequenceInput = "4,3,3,2,1";
-    const degreeSequence = degreeSequenceInput.split(',').map(Number);
-    generateGraph(degreeSequence);
+    if (!started) {
+        started = true;
+        generateGraph(degreeSequence);
+    }
+});
+
+document.getElementById('add-node-btn').addEventListener('click', function() {
+    if (started) {
+        addNode(degreeSequence[currentNodeIndex]);
+    }
 });
 
 document.getElementById('done-btn').addEventListener('click', function() {
