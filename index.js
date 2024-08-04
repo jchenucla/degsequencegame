@@ -1,17 +1,19 @@
 const degreeSequenceInput = "4,3,3,2,1";
 let degreeSequence = degreeSequenceInput.split(',').map(Number);
 let started = false;
+let currentNodeIndex = 0; // Start with the first node
 
 document.getElementById('start-btn').addEventListener('click', function() {
     if (!started) {
         started = true;
-        generateGraph(degreeSequence);
+        generateGraph(degreeSequence); // Show all nodes initially as hidden
     }
 });
 
 document.getElementById('add-node-btn').addEventListener('click', function() {
-    if (started) {
-        addNode(degreeSequence[currentNodeIndex]);
+    if (started && currentNodeIndex < degreeSequence.length) {
+        revealNode(currentNodeIndex);
+        currentNodeIndex++;
     }
 });
 
@@ -25,8 +27,9 @@ let node;
 let label;
 let nodes = [];
 let links = [];
+let simulation;
 
-function generateGraph(degreeSequence) {
+function generateGraph(initialDegreeSequence) {
     const width = 800;
     const height = 400;
 
@@ -36,16 +39,18 @@ function generateGraph(degreeSequence) {
         .attr("width", width)
         .attr("height", height);
 
-    nodes = degreeSequence.map((degree, index) => ({
+    nodes = initialDegreeSequence.map((degree, index) => ({
         id: index,
         degree: degree,
         originalDegree: degree, // Keep the original degree for display
-        connections: 0 // Track the number of connections
+        connections: 0, // Track the number of connections
+        x: width / 2,
+        y: height / 2
     }));
 
     links = [];
 
-    const simulation = d3.forceSimulation(nodes)
+    simulation = d3.forceSimulation(nodes)
         .force("link", d3.forceLink(links).id(d => d.id).distance(100))
         .force("charge", d3.forceManyBody().strength(-300))
         .force("center", d3.forceCenter(width / 2, height / 2))
@@ -65,6 +70,7 @@ function generateGraph(degreeSequence) {
         .enter().append("circle")
         .attr("r", 20)
         .attr("fill", "#4CAF50")
+        .style("visibility", "hidden") // Hide all nodes initially
         .on("click", onNodeClick)
         .call(d3.drag()
             .on("start", dragstarted)
@@ -78,7 +84,8 @@ function generateGraph(degreeSequence) {
         .enter().append("text")
         .attr("dy", 4)
         .attr("text-anchor", "middle")
-        .text(d => d.originalDegree);
+        .text(d => d.originalDegree)
+        .style("visibility", "hidden"); // Hide all labels initially
 
     function ticked() {
         link
@@ -162,6 +169,14 @@ function generateGraph(degreeSequence) {
     });
 
     updateLinks(); // Initialize link update to draw initial state
+}
+
+function revealNode(index) {
+    node.filter((d, i) => i === index)
+        .style("visibility", "visible");
+
+    label.filter((d, i) => i === index)
+        .style("visibility", "visible");
 }
 
 function checkDegreeSequence() {
