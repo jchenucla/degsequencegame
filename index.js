@@ -6,7 +6,7 @@ let currentNodeIndex = 0; // Start with the first node
 document.getElementById('start-btn').addEventListener('click', function() {
     if (!started) {
         started = true;
-        this.textContent = "Restart"; // Change the button text to "Restart"
+        this.textContent = "Restart";
         generateGraph(degreeSequence); // Show all nodes initially as hidden
 
         revealNode(currentNodeIndex);
