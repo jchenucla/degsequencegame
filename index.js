@@ -1,4 +1,4 @@
-const degreeSequenceInput = "2,3,2,1";
+const degreeSequenceInput = "3,2,2,1";
 let degreeSequence = degreeSequenceInput.split(',').map(Number);
 let started = false;
 let currentNodeIndex = 0; // Start with the first node
@@ -6,7 +6,17 @@ let currentNodeIndex = 0; // Start with the first node
 document.getElementById('start-btn').addEventListener('click', function() {
     if (!started) {
         started = true;
+        this.textContent = "Restart"; // Change the button text to "Restart"
         generateGraph(degreeSequence); // Show all nodes initially as hidden
+
+        revealNode(currentNodeIndex);
+        currentNodeIndex++;
+        revealNode(currentNodeIndex);
+        currentNodeIndex++;
+    } else {
+        // Reset the graph
+        resetGraph();
+        generateGraph(degreeSequence); // Regenerate the graph
     }
 });
 
@@ -187,6 +197,11 @@ function revealNode(index) {
 
     label.filter((d, i) => i === index)
         .style("visibility", "visible");
+
+    // Change the text on the add-node button after the last node is revealed
+    if (index === degreeSequence.length - 1) {
+        document.getElementById('add-node-btn').textContent = "No More Node";
+    }
 }
 
 function checkDegreeSequence() {
@@ -200,4 +215,15 @@ function checkDegreeSequence() {
         message.textContent = "Degree sequence is not completed. Please check the connections.";
         message.style.color = "red";
     }
+}
+
+function resetGraph() {
+    d3.select("#graph-container").html("");
+    nodes = [];
+    links = [];
+    currentNodeIndex = 0;
+    selectedNode = null;
+    started = false;
+    document.getElementById('start-btn').textContent = "Start";
+    document.getElementById('add-node-btn').textContent = "Next Node"; // Reset the add-node button text
 }
