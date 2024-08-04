@@ -1,4 +1,4 @@
-const degreeSequenceInput = "3,2,2,1";
+const degreeSequenceInput = "2,4,6,4,3,1,2,2";
 let degreeSequence = degreeSequenceInput.split(',').map(Number);
 let started = false;
 let currentNodeIndex = 0; // Start with the first node
@@ -20,7 +20,7 @@ document.getElementById('start-btn').addEventListener('click', function() {
     }
 });
 
-document.getElementById('add-node-btn').addEventListener('click', function() {
+document.getElementById('undo-btn').addEventListener('click', function() {
     if (started && currentNodeIndex < degreeSequence.length) {
         revealNode(currentNodeIndex);
         currentNodeIndex++;
