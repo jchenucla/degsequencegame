@@ -1,4 +1,4 @@
-const degreeSequenceInput = "4,3,3,2,1";
+const degreeSequenceInput = "2,3,2,1";
 let degreeSequence = degreeSequenceInput.split(',').map(Number);
 let started = false;
 let currentNodeIndex = 0; // Start with the first node
@@ -128,7 +128,13 @@ function generateGraph(initialDegreeSequence) {
             selectedNode = null;
             d3.select(this).attr("fill", "#4CAF50"); // Unselect the node
         } else {
-            if (selectedNode.connections < selectedNode.originalDegree && d.connections < d.originalDegree) {
+            // Check if link already exists
+            const linkExists = links.some(link => 
+                (link.source === selectedNode && link.target === d) ||
+                (link.source === d && link.target === selectedNode)
+            );
+
+            if (selectedNode.connections < selectedNode.originalDegree && d.connections < d.originalDegree && !linkExists) {
                 // Create a link between selectedNode and clicked node
                 links.push({ source: selectedNode, target: d });
                 selectedNode.connections++;
@@ -142,6 +148,10 @@ function generateGraph(initialDegreeSequence) {
                 simulation.alpha(1).restart();
 
                 // Reset node colors
+                d3.selectAll("circle").attr("fill", "#4CAF50");
+            } else if (linkExists) {
+                alert("These two nodes are already connected.");
+                selectedNode = null;
                 d3.selectAll("circle").attr("fill", "#4CAF50");
             } else {
                 alert("One of the nodes has reached its maximum connections.");
