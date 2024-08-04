@@ -3,19 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Initial Screen</title>
+    <title>Play Edges</title>
     <link rel="stylesheet" href="initialscreen.css">
 </head>
 <body>
     <header>
-        <h1>Welcome to the Game</h1>
+        <h1>Edges</h1>
+        <h2>How many simple graphs can you draw before striking out?</h2>
+        <div id="button-container">
+            <button id="play-btn">Play</button>
+            <button id="how-to-play-btn">How to Play</button>
+        </div>
+        <h4>A New York Times inspired game by: Joy Chen (UCLA) and Sungmin Park (ASU)</h4>
     </header>
     <main>
-        <div id="button-container">
-            <button id="how-to-play-btn">How to Play</button>
-            <button id="play-btn">Play</button>
+        <div id="instruction" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h3>How to Play</h3>
+                <h4>Your objective is to draw a simple graph according to the degree sequence shown on the screen.</h4>
+                <p>1. Click on the canvas to add circles.</p>
+                <p>2. Click on an existing circle to start connecting it to another circle.</p>
+                <p>3. Double-click on another circle to create an edge between them.</p>
+                <p>4. Click on an edge to remove an edge.</p>
+                <p>5. Repeat steps 2 and 3 to form the required graph.</p>
+                <p>Tip: Use the "Clear" button to reset the entire canvas.</p>
+                <p>Tip: Use the "Check" button to verify if the graph matches the degree sequence.</p>
+            </div>
         </div>
     </main>
+
     <script src="initialscreen.js"></script>
+
 </body>
 </html>
