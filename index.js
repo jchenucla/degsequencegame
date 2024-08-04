@@ -1,7 +1,30 @@
-document.getElementById('generate-btn').addEventListener('click', function() {
-    const degreeSequenceInput = document.getElementById('degree-sequence').value;
-    const degreeSequence = degreeSequenceInput.split(',').map(Number);
-    generateGraph(degreeSequence);
+const degreeSequenceInput = "3,2,2,1";
+let degreeSequence = degreeSequenceInput.split(',').map(Number);
+let started = false;
+let currentNodeIndex = 0; // Start with the first node
+
+document.getElementById('start-btn').addEventListener('click', function() {
+    if (!started) {
+        started = true;
+        this.textContent = "Restart";
+        generateGraph(degreeSequence); // Show all nodes initially as hidden
+
+        revealNode(currentNodeIndex);
+        currentNodeIndex++;
+        revealNode(currentNodeIndex);
+        currentNodeIndex++;
+    } else {
+        // Reset the graph
+        resetGraph();
+        generateGraph(degreeSequence); // Regenerate the graph
+    }
+});
+
+document.getElementById('add-node-btn').addEventListener('click', function() {
+    if (started && currentNodeIndex < degreeSequence.length) {
+        revealNode(currentNodeIndex);
+        currentNodeIndex++;
+    }
 });
 
 document.getElementById('done-btn').addEventListener('click', function() {
@@ -14,8 +37,9 @@ let node;
 let label;
 let nodes = [];
 let links = [];
+let simulation;
 
-function generateGraph(degreeSequence) {
+function generateGraph(initialDegreeSequence) {
     const width = 800;
     const height = 400;
 
@@ -25,16 +49,18 @@ function generateGraph(degreeSequence) {
         .attr("width", width)
         .attr("height", height);
 
-    nodes = degreeSequence.map((degree, index) => ({
+    nodes = initialDegreeSequence.map((degree, index) => ({
         id: index,
         degree: degree,
         originalDegree: degree, // Keep the original degree for display
-        connections: 0 // Track the number of connections
+        connections: 0, // Track the number of connections
+        x: width / 2,
+        y: height / 2
     }));
 
     links = [];
 
-    const simulation = d3.forceSimulation(nodes)
+    simulation = d3.forceSimulation(nodes)
         .force("link", d3.forceLink(links).id(d => d.id).distance(100))
         .force("charge", d3.forceManyBody().strength(-300))
         .force("center", d3.forceCenter(width / 2, height / 2))
@@ -54,6 +80,7 @@ function generateGraph(degreeSequence) {
         .enter().append("circle")
         .attr("r", 20)
         .attr("fill", "#4CAF50")
+        .style("visibility", "hidden") // Hide all nodes initially
         .on("click", onNodeClick)
         .call(d3.drag()
             .on("start", dragstarted)
@@ -67,7 +94,8 @@ function generateGraph(degreeSequence) {
         .enter().append("text")
         .attr("dy", 4)
         .attr("text-anchor", "middle")
-        .text(d => d.originalDegree);
+        .text(d => d.originalDegree)
+        .style("visibility", "hidden"); // Hide all labels initially
 
     function ticked() {
         link
@@ -110,7 +138,13 @@ function generateGraph(degreeSequence) {
             selectedNode = null;
             d3.select(this).attr("fill", "#4CAF50"); // Unselect the node
         } else {
-            if (selectedNode.connections < selectedNode.originalDegree && d.connections < d.originalDegree) {
+            // Check if link already exists
+            const linkExists = links.some(link => 
+                (link.source === selectedNode && link.target === d) ||
+                (link.source === d && link.target === selectedNode)
+            );
+
+            if (selectedNode.connections < selectedNode.originalDegree && d.connections < d.originalDegree && !linkExists) {
                 // Create a link between selectedNode and clicked node
                 links.push({ source: selectedNode, target: d });
                 selectedNode.connections++;
@@ -124,6 +158,10 @@ function generateGraph(degreeSequence) {
                 simulation.alpha(1).restart();
 
                 // Reset node colors
+                d3.selectAll("circle").attr("fill", "#4CAF50");
+            } else if (linkExists) {
+                alert("These two nodes are already connected.");
+                selectedNode = null;
                 d3.selectAll("circle").attr("fill", "#4CAF50");
             } else {
                 alert("One of the nodes has reached its maximum connections.");
@@ -153,6 +191,19 @@ function generateGraph(degreeSequence) {
     updateLinks(); // Initialize link update to draw initial state
 }
 
+function revealNode(index) {
+    node.filter((d, i) => i === index)
+        .style("visibility", "visible");
+
+    label.filter((d, i) => i === index)
+        .style("visibility", "visible");
+
+    // Change the text on the add-node button after the last node is revealed
+    if (index === degreeSequence.length - 1) {
+        document.getElementById('add-node-btn').textContent = "No More Node";
+    }
+}
+
 function checkDegreeSequence() {
     const message = document.getElementById('message');
     const allCorrect = nodes.every(node => node.connections === node.originalDegree);
@@ -164,4 +215,15 @@ function checkDegreeSequence() {
         message.textContent = "Degree sequence is not completed. Please check the connections.";
         message.style.color = "red";
     }
+}
+
+function resetGraph() {
+    d3.select("#graph-container").html("");
+    nodes = [];
+    links = [];
+    currentNodeIndex = 0;
+    selectedNode = null;
+    started = false;
+    document.getElementById('start-btn').textContent = "Start";
+    document.getElementById('add-node-btn').textContent = "Next Node"; // Reset the add-node button text
 }
