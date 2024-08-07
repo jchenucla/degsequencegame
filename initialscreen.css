@@ -1,5 +1,5 @@
 body {
-    font-family: 'Franklin Gothic Medium', 'Franklin Gothic', 'ITC Franklin Gothic', 'Arial', 'sans-serif';
+    font-family: 'Franklin Gothic Medium', 'Franklin Gothic';
     display: flex;
     justify-content: center;
     align-items: center;
@@ -7,7 +7,7 @@ body {
     height: 100vh;
     width: 100%;
     margin: 0;
-    background-color: #ffd332;
+    background-color: #fdd238;
 }
 
 .header {
@@ -15,24 +15,36 @@ body {
     text-align: center;
 }
 
+.subtitle {
+    font-family: "Franklin Gothic";
+    font-size: large;
+}
+
 button {
-    font-family: 'Franklin Gothic Medium', 'Franklin Gothic', 'ITC Franklin Gothic', 'Arial', 'sans-serif';
-    margin: 0 10px;
-    padding: 10px 20px;
+    font-family: 'Franklin Gothic Medium', 'ITC Franklin Gothic';
+    margin: 0 5px;
+    padding: 12px 20px;
     font-size: 20px;
-    font-weight: 500px;
+    font-weight: 150px;
     border: none;
-    background-color: #929292;
     color: #fff;
     cursor: pointer;
-    transition: background-color 0.3s ease;
-    border-radius: 8%;
+    transition: all 0.3s ease-in-out;
+    border-radius: 1.5rem;
     display: inline;
     margin-right: 5px;
 }
 
 button:hover {
-    background-color: #393939;
+    transform:  translateY(-5px);
+}
+
+#play-btn {
+    background-color: #1f1f1f;
+}
+
+#how-to-play-btn {
+    background-color: #fea50b;
 }
 
 .modal {

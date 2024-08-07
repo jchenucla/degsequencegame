@@ -1,3 +1,7 @@
+document.getElementById("play-btn").addEventListener('click', function() {
+    window.location.href = 'index.html';
+});
+
 // Get the modal
 var modal = document.getElementById("instruction");
 
@@ -23,7 +27,3 @@ window.onclick = function(event) {
     modal.style.display = "none";
   }
 }
-
-document.getElementById('play-btn').addEventListener('click', function() {
-    window.location.href = 'index.html';
-}); 
