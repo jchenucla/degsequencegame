@@ -4,21 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Play Edges</title>
+    <style>
+        .top-right{
+            position: fixed;
+            top: 30px;
+            right: 30px;
+        }
+    </style>
     <link rel="stylesheet" href="index.css">
 </head>
 <body>
     <header>
-        <img src = "logo.png" width = "140" height = "140">
-        <h1>Edges</h1>
-        <h2 class="subtitle">Create the graph before the timer runs out!</h2>
-
         <div id="timer">00:00</div>
         <div id="graph-container"></div>
-        <div id="controls">
-            <button id="start-btn">Ready</button>
-            <button id="undo-btn">Next</button>
+        <div id="controls"></div>
+            <button id="undo-btn">Undo</button>
             <button id="done-btn">Check</button>
-            <button id="how-to-play-btn">How to Play</button>
+            <button id="how-to-play-btn" class = "top-right">How to Play</button>
         </div>
 
     </header>
