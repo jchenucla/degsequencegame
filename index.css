@@ -114,22 +114,22 @@ button:hover {
 .modal {
     display: none;
     position: fixed;
-    z-index: 1; /* Sit on top */
+    align-self: center;
     left: 0;
     top: 0;
     width: 100%;
     height: 100%;
-    overflow-y: scroll; /* Enable scroll if needed */
     background-color: #ffd332;
 }
   
 .modal-content {
     background-color: #ffffff;
-    margin: 15% auto; /* 15% from the top and centered */
+    margin: 8% auto; /* 15% from the top and centered */
     padding: 20px;
     border: 10px solid #de9800;
-    width: 80%;
+    width: 40%;
     border-radius: 1.5rem;
+    align-items: center;
 }
   
 .close {
