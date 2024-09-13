@@ -19,6 +19,15 @@ h3 {
     font-size: 22px
 }
 
+p {
+    font-size: 15px;
+    text-align: left;
+}
+
+.centered {
+    text-align: center;
+}
+
 .initial-screen, .container {
     text-align: center;
     width: 100%;
