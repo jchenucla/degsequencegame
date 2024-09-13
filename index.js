@@ -1,4 +1,3 @@
-
 // Modal
 var modal = document.getElementById("instruction");
 
@@ -27,19 +26,13 @@ let degreeSequence = degreeSequenceInput.split(',').map(Number);
 let started = false;
 let currentNodeIndex = 0; // Start with the first node
 
-document.getElementById('start-btn').addEventListener('click', function() {
-    if (!started) {
-        started = true;
-        generateGraph(degreeSequence); // Show all nodes initially as hidden
-        revealAllNodes(); // Show all nodes at 
-        
-    } else {
-        started = false;
-        // Reset the graph
-        resetGraph();
-        generateGraph(degreeSequence); // Regenerate the graph
-    }
-});
+// Automatically generate the graph and reveal all nodes on page load
+window.onload = function() {
+    generateGraph(degreeSequence); // Generate the graph
+    revealAllNodes(); // Reveal all nodes immediately
+};
+
+// Removed the start button event listener
 
 document.getElementById('undo-btn').addEventListener('click', function() {
     if (started && currentNodeIndex < degreeSequence.length) {
@@ -107,6 +100,7 @@ function generateGraph(initialDegreeSequence) {
             .on("start", dragstarted)
             .on("drag", dragged)
             .on("end", dragended));
+
 /*
 //number showing on the nodes.
     label = svg.append("g")
@@ -167,7 +161,7 @@ function generateGraph(initialDegreeSequence) {
                 (link.source === d && link.target === selectedNode)
             );
 
-            if ( /*selectedNode.connections < selectedNode.originalDegree && d.connections < d.originalDegree && */ !linkExists) {
+            if ( !linkExists) {
                 // Create a link between selectedNode and clicked node
                 links.push({ source: selectedNode, target: d });
                 selectedNode.connections++;
@@ -186,12 +180,7 @@ function generateGraph(initialDegreeSequence) {
                 alert("These two nodes are already connected.");
                 selectedNode = null;
                 d3.selectAll("circle").attr("fill", "#4CAF50");
-            } /*else {
-                alert("One of the nodes has reached its maximum connections.");
-                selectedNode = null;
-                d3.selectAll("circle").attr("fill", "#4CAF50");
-            }
-            */
+            } 
         }
     }
 
@@ -261,6 +250,4 @@ function resetGraph() {
     currentNodeIndex = 0;
     selectedNode = null;
     started = false;
-    document.getElementById('start-btn').textContent = "Start";
-    document.getElementById('add-node-btn').textContent = "Next Node"; // Reset the add-node button text
 }
