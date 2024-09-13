@@ -21,10 +21,13 @@ window.onclick = function(event) {
   }
 }
 
+
+// Degree Sequence stuff
+
 const degreeSequenceInput = "1,2,3,2";
 let degreeSequence = degreeSequenceInput.split(',').map(Number);
 let started = false;
-let currentNodeIndex = 0; // Start with the first node
+/* let currentNodeIndex = 0; // Start with the first node */
 
 // Automatically generate the graph and reveal all nodes on page load
 window.onload = function() {
@@ -41,7 +44,7 @@ document.getElementById('undo-btn').addEventListener('click', function() {
     }
 });
 
-document.getElementById('done-btn').addEventListener('click', function() {
+document.getElementById('check-btn').addEventListener('click', function() {
     checkDegreeSequence();
 });
 
