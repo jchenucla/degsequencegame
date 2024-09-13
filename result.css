@@ -1,0 +1,28 @@
+body {
+    font-family: 'Franklin Gothic Medium', 'Franklin Gothic';
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    height: 100vh;
+    width: 100%;
+    margin: 0;
+    background-color: #fdd238;
+}
+
+.subtitle {
+    font-family: "Franklin Gothic";
+    font-size: large;
+}
+
+h1 {
+    font-size: 35px;
+}
+  
+h2 {
+    font-size: 25px;
+}
+
+h3 {
+    font-size: 22px
+}

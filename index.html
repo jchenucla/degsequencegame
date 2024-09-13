@@ -8,6 +8,7 @@
 </head>
 <body>
     <header>
+        <img src = "logo.png" width = "140" height = "140">
         <h1>Edges</h1>
         <h2 class="subtitle">Create the graph before the timer runs out!</h2>
 
@@ -15,25 +16,26 @@
         <div id="graph-container"></div>
         <div id="controls">
             <button id="start-btn">Ready</button>
-            <button id="next-btn">Next</button>
+            <button id="undo-btn">Next</button>
             <button id="done-btn">Check</button>
             <button id="how-to-play-btn">How to Play</button>
         </div>
 
     </header>
+    
     <main>
         <div id="instruction" class="modal">
             <div class="modal-content">
                 <span class="close">&times;</span>
                 <h3>How to Play</h3>
-                <h4>Your objective is to draw a simple graph according to the degree sequence shown on the screen.</h4>
-                <p>1. Click on the canvas to add circles.</p>
-                <p>2. Click on an existing circle to start connecting it to another circle.</p>
-                <p>3. Double-click on another circle to create an edge between them.</p>
-                <p>4. Click on an edge to remove an edge.</p>
-                <p>5. Repeat steps 2 and 3 to form the required graph.</p>
-                <p>Tip: Use the "Clear" button to reset the entire canvas.</p>
-                <p>Tip: Use the "Check" button to verify if the graph matches the degree sequence.</p>
+                <h4>Objective: Draw a simple graph based on the degree sequence shown on the screen before the timer runs out!</h4>
+                <p>1. Click on the node that you wish to connect.</p>
+                <p>2. Click on another node that you wish to connect the node to.</p>
+                <p>3. Repeat steps 1 and 2 to create the graph before the timer runs out!</p>
+                <p>4. Use the "Check" button to verify if the graph matches the degree sequence.</p>
+                <h2 class = "centered">--------------------------------</p>
+                <p class = "centered">Tip: Use the "Undo" button to undo your last move.</p>
+                <p class = "centered">Tip: Visit again tomorrow to maintain your Streak!</p>
             </div>
         </div>
         <div id="message"></div>
