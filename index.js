@@ -6,7 +6,7 @@ let currentNodeIndex = 0; // Start with the first node
 document.getElementById('start-btn').addEventListener('click', function() {
     if (!started) {
         started = true;
-        this.textContent = "Restart";
+        this.textContent = "Clear";
         generateGraph(degreeSequence); // Show all nodes initially as hidden
 
         revealNode(currentNodeIndex);
@@ -209,10 +209,10 @@ function checkDegreeSequence() {
     const allCorrect = nodes.every(node => node.connections === node.originalDegree);
 
     if (allCorrect) {
-        message.textContent = "Degree sequence is completed.";
+        message.textContent = "Correct!";
         message.style.color = "green";
     } else {
-        message.textContent = "Degree sequence is not completed. Please check the connections.";
+        message.textContent = "Try Again!";
         message.style.color = "red";
     }
 }
