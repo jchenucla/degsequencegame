@@ -15,6 +15,10 @@ body {
     font-size: large;
 }
 
+h3 {
+    font-size: 22px
+}
+
 .initial-screen, .container {
     text-align: center;
     width: 100%;
@@ -37,6 +41,8 @@ body {
 
 .header {
     margin-bottom: 20px;
+    margin: 0;
+    padding: 0;
 }
 
 #graph-container {
@@ -74,8 +80,12 @@ button {
     margin-right: 5px;
 }
 
+#start-btn {
+    background-color: #5f8444;
+}
+
 #done-btn {
-    background-color: #cd7b00;
+    background-color: #de9800;
 }
 
 button:hover {
@@ -88,38 +98,41 @@ button:hover {
     font-size: 18px;
 }
 
+#how-to-play-btn {
+    background-color: #de9800;
+}
+
 .modal {
     display: none;
     position: fixed;
-    z-index: 1;
+    z-index: 1; /* Sit on top */
     left: 0;
     top: 0;
     width: 100%;
     height: 100%;
-    overflow: auto;
-    background-color: rgba(0, 0, 0, 0.5);
+    overflow-y: scroll; /* Enable scroll if needed */
+    background-color: #ffd332;
 }
-
+  
 .modal-content {
-    background-color: #fff;
-    margin: 15% auto;
+    background-color: #ffffff;
+    margin: 15% auto; /* 15% from the top and centered */
     padding: 20px;
-    border: 1px solid #888;
+    border: 10px solid #de9800;
     width: 80%;
-    max-width: 600px;
-    text-align: left;
+    border-radius: 1.5rem;
 }
-
-.close-button {
-    color: #aaa;
+  
+.close {
+    color: #636363;
     float: right;
-    font-size: 28px;
+    font-size: 30px;
     font-weight: bold;
 }
-
-.close-button:hover,
-.close-button:focus {
-    color: #000;
+  
+.close:hover,
+.close:focus {
+    color: black;
     text-decoration: none;
     cursor: pointer;
 }
