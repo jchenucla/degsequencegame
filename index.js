@@ -1,13 +1,12 @@
 
 // Modal
 var modal = document.getElementById("instruction");
-var btn = document.getElementById("how-to-play-btn");
 
 // Get the <span> element that closes the modal
 var span = document.getElementsByClassName("close")[0];
 
 // When the user clicks on the button, open the modal
-btn.onclick = function() {
+document.getElementById('how-to-play-btn').onclick = function() {
   modal.style.display = "block";
 }
 
@@ -23,7 +22,6 @@ window.onclick = function(event) {
   }
 }
 
-
 const degreeSequenceInput = "1,2,3,2";
 let degreeSequence = degreeSequenceInput.split(',').map(Number);
 let started = false;
@@ -32,17 +30,18 @@ let currentNodeIndex = 0; // Start with the first node
 document.getElementById('start-btn').addEventListener('click', function() {
     if (!started) {
         started = true;
-        this.textContent = "Clear";
         generateGraph(degreeSequence); // Show all nodes initially as hidden
-        revealAllNodes(); // Show all nodes at once
+        revealAllNodes(); // Show all nodes at 
+        
     } else {
+        started = false;
         // Reset the graph
         resetGraph();
         generateGraph(degreeSequence); // Regenerate the graph
     }
 });
 
-document.getElementById('next-btn').addEventListener('click', function() {
+document.getElementById('undo-btn').addEventListener('click', function() {
     if (started && currentNodeIndex < degreeSequence.length) {
         revealNode(currentNodeIndex);
         currentNodeIndex++;
