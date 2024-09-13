@@ -1,3 +1,4 @@
+
 // Modal
 var modal = document.getElementById("instruction");
 var btn = document.getElementById("how-to-play-btn");
@@ -22,8 +23,11 @@ window.onclick = function(event) {
   }
 }
 
+
 const degreeSequenceInput = "2,4,6,4,3,1,2,2";
 let degreeSequence = degreeSequenceInput.split(',').map(Number);
+// Create zero-degree sequence with the same length as the original sequence
+const zeroDegreeSequence = degreeSequence.map(() => 0);
 let started = false;
 let currentNodeIndex = 0; // Start with the first node
 
@@ -31,21 +35,17 @@ document.getElementById('start-btn').addEventListener('click', function() {
     if (!started) {
         started = true;
         this.textContent = "Clear";
-        generateGraph(degreeSequence); // Show all nodes initially as hidden
-
-        revealNode(currentNodeIndex);
-        currentNodeIndex++;
-        revealNode(currentNodeIndex);
-        currentNodeIndex++;
+        generateGraph(zeroDegreeSequence); // Show all nodes initially as hidden
+        revealAllNodes(); // Show all nodes at once
     } else {
         // Reset the graph
         resetGraph();
-        generateGraph(degreeSequence); // Regenerate the graph
+        generateGraph(zeroDegreeSequence); // Regenerate the graph
     }
 });
 
-document.getElementById('undo-btn').addEventListener('click', function() {
-    if (started && currentNodeIndex < degreeSequence.length) {
+document.getElementById('next-btn').addEventListener('click', function() {
+    if (started && currentNodeIndex < zeroDegreeSequence.length) {
         revealNode(currentNodeIndex);
         currentNodeIndex++;
     }
@@ -111,6 +111,7 @@ function generateGraph(initialDegreeSequence) {
             .on("drag", dragged)
             .on("end", dragended));
 
+//number showing on the nodes.
     label = svg.append("g")
         .attr("class", "labels")
         .selectAll("text")
@@ -215,6 +216,14 @@ function generateGraph(initialDegreeSequence) {
     updateLinks(); // Initialize link update to draw initial state
 }
 
+function revealAllNodes() {
+    node.style("visibility", "visible");  // Make all nodes visible
+    label.style("visibility", "visible");  // Make all labels visible
+}
+
+/*
+//not used function
+//reveal a node one by one.
 function revealNode(index) {
     node.filter((d, i) => i === index)
         .style("visibility", "visible");
@@ -227,6 +236,7 @@ function revealNode(index) {
         document.getElementById('add-node-btn').textContent = "No More Node";
     }
 }
+*/
 
 function checkDegreeSequence() {
     const message = document.getElementById('message');
