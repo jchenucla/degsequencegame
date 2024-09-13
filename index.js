@@ -1,7 +1,5 @@
-// Get the modal
+// Modal
 var modal = document.getElementById("instruction");
-
-// Get the button that opens the modal
 var btn = document.getElementById("how-to-play-btn");
 
 // Get the <span> element that closes the modal
