@@ -77,7 +77,7 @@ button {
     font-family: 'Franklin Gothic Medium', 'ITC Franklin Gothic';
     margin: 0 5px;
     padding: 12px 20px;
-    font-size: 18px;
+    font-size: 20px;
     font-weight: 150px;
     border: none;
     background-color: #5d5d5d;
@@ -89,11 +89,7 @@ button {
     margin-right: 5px;
 }
 
-#start-btn {
-    background-color: #5f8444;
-}
-
-#done-btn {
+#check-btn {
     background-color: #de9800;
 }
 
@@ -109,6 +105,7 @@ button:hover {
 
 #how-to-play-btn {
     background-color: #de9800;
+    font-size: 17px;
 }
 
 .modal {
