@@ -1,12 +1,12 @@
+
 // Modal
 var modal = document.getElementById("instruction");
-var btn = document.getElementById("how-to-play-btn");
 
 // Get the <span> element that closes the modal
 var span = document.getElementsByClassName("close")[0];
 
 // When the user clicks on the button, open the modal
-btn.onclick = function() {
+document.getElementById('how-to-play-btn').onclick = function() {
   modal.style.display = "block";
 }
 
@@ -22,7 +22,7 @@ window.onclick = function(event) {
   }
 }
 
-const degreeSequenceInput = "2,4,6,4,3,1,2,2";
+const degreeSequenceInput = "1,2,3,2";
 let degreeSequence = degreeSequenceInput.split(',').map(Number);
 let started = false;
 let currentNodeIndex = 0; // Start with the first node
@@ -30,14 +30,11 @@ let currentNodeIndex = 0; // Start with the first node
 document.getElementById('start-btn').addEventListener('click', function() {
     if (!started) {
         started = true;
-        this.textContent = "Clear";
         generateGraph(degreeSequence); // Show all nodes initially as hidden
-
-        revealNode(currentNodeIndex);
-        currentNodeIndex++;
-        revealNode(currentNodeIndex);
-        currentNodeIndex++;
+        revealAllNodes(); // Show all nodes at 
+        
     } else {
+        started = false;
         // Reset the graph
         resetGraph();
         generateGraph(degreeSequence); // Regenerate the graph
@@ -110,7 +107,8 @@ function generateGraph(initialDegreeSequence) {
             .on("start", dragstarted)
             .on("drag", dragged)
             .on("end", dragended));
-
+/*
+//number showing on the nodes.
     label = svg.append("g")
         .attr("class", "labels")
         .selectAll("text")
@@ -120,6 +118,7 @@ function generateGraph(initialDegreeSequence) {
         .attr("text-anchor", "middle")
         .text(d => d.originalDegree)
         .style("visibility", "hidden"); // Hide all labels initially
+*/
 
     function ticked() {
         link
@@ -168,7 +167,7 @@ function generateGraph(initialDegreeSequence) {
                 (link.source === d && link.target === selectedNode)
             );
 
-            if (selectedNode.connections < selectedNode.originalDegree && d.connections < d.originalDegree && !linkExists) {
+            if ( /*selectedNode.connections < selectedNode.originalDegree && d.connections < d.originalDegree && */ !linkExists) {
                 // Create a link between selectedNode and clicked node
                 links.push({ source: selectedNode, target: d });
                 selectedNode.connections++;
@@ -187,11 +186,12 @@ function generateGraph(initialDegreeSequence) {
                 alert("These two nodes are already connected.");
                 selectedNode = null;
                 d3.selectAll("circle").attr("fill", "#4CAF50");
-            } else {
+            } /*else {
                 alert("One of the nodes has reached its maximum connections.");
                 selectedNode = null;
                 d3.selectAll("circle").attr("fill", "#4CAF50");
             }
+            */
         }
     }
 
@@ -215,6 +215,14 @@ function generateGraph(initialDegreeSequence) {
     updateLinks(); // Initialize link update to draw initial state
 }
 
+function revealAllNodes() {
+    node.style("visibility", "visible");  // Make all nodes visible
+    label.style("visibility", "visible");  // Make all labels visible
+}
+
+/*
+//not used function
+//reveal a node one by one.
 function revealNode(index) {
     node.filter((d, i) => i === index)
         .style("visibility", "visible");
@@ -227,11 +235,15 @@ function revealNode(index) {
         document.getElementById('add-node-btn').textContent = "No More Node";
     }
 }
+*/
 
 function checkDegreeSequence() {
     const message = document.getElementById('message');
-    const allCorrect = nodes.every(node => node.connections === node.originalDegree);
+    const nodeDegrees = nodes.map(n => n.connections).sort();
+    const expectedDegrees = degreeSequence.slice().sort(); // Sort to compare unordered sequences
 
+    const allCorrect = JSON.stringify(nodeDegrees) === JSON.stringify(expectedDegrees);
+    
     if (allCorrect) {
         message.textContent = "Correct!";
         message.style.color = "green";
@@ -240,6 +252,7 @@ function checkDegreeSequence() {
         message.style.color = "red";
     }
 }
+
 
 function resetGraph() {
     d3.select("#graph-container").html("");
