@@ -31,6 +31,26 @@ let started = false;
 
 // Automatically generate the graph and reveal all nodes on page load
 window.onload = function() {
+    // Start the countdown timer
+    let timeRemaining = parseInt(localStorage.getItem('timer')) || 60; // Get the initial timer value or default to 60 seconds
+    const timerElement = document.getElementById("timer");
+
+    function startCountdown() {
+        const countdownInterval = setInterval(() => {
+            if (timeRemaining > 0) {
+                timeRemaining--;
+                timerElement.textContent = `00:${timeRemaining < 10 ? '0' : ''}${timeRemaining}`; // Update timer display
+            } else {
+                clearInterval(countdownInterval);
+                // Handle timeout logic here (e.g., game over)
+                message.textContent = "Times Up!";
+                message.style.color = "red";
+            }
+        }, 1000); // 1000ms = 1 second
+    }
+
+    startCountdown();
+
     generateGraph(degreeSequence); // Generate the graph
     revealAllNodes(); // Reveal all nodes immediately
 };
