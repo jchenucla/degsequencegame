@@ -16,13 +16,29 @@ body {
 }
 
 h1 {
-    font-size: 35px;
+    font-size: 25px;
 }
   
 h2 {
-    font-size: 25px;
+    font-size: 35px;
 }
 
 h3 {
     font-size: 22px
+}
+
+#back-btn {
+    background-color: #4b4b4b;
+    padding: 12px 20px;
+    font-size: 20px;
+    font-family: 'Franklin Gothic Medium', 'ITC Franklin Gothic';
+    border: none;
+    color: #fff;
+    cursor: pointer;
+    border-radius: 1.5rem;
+    transition: all 0.3s ease-in-out;
+}
+
+button:hover {
+    transform:  translateY(-4px);
 }
