@@ -28,7 +28,7 @@ h3 {
 }
 
 #back-btn {
-    background-color: #4b4b4b;
+    background-color: #5d5d5d;
     padding: 12px 20px;
     font-size: 20px;
     font-family: 'Franklin Gothic Medium', 'ITC Franklin Gothic';
@@ -39,6 +39,7 @@ h3 {
     transition: all 0.3s ease-in-out;
 }
 
-button:hover {
+#back-btn:hover {
+    background-color: #3f3f3f;
     transform:  translateY(-4px);
 }

@@ -43,8 +43,9 @@ window.onload = function() {
                 timerElement.textContent = `00:${timeRemaining < 10 ? '0' : ''}${timeRemaining}`; // Update timer display
             } else {
                 clearInterval(countdownInterval);
-                message.textContent = "Times Up!";
-                message.style.color = "red";
+                // Set timeout flag in localStorage and redirect
+                localStorage.setItem('timeout', 'true');
+                window.location.href = `result.html`;
             }
         }, 1000); // 1000ms = 1 second
     }
@@ -287,8 +288,12 @@ function checkDegreeSequence() {
         // Calculate points based on remaining time
         const points = timeRemaining * 10;  // Each second left gives 10 points (adjust scoring as needed)
 
-        // Redirect to result page with points as query parameter
-        window.location.href = `result.html?points=${points}`;
+        // Store the points in localStorage and clear the timeout flag
+        localStorage.setItem('points', points);
+        localStorage.setItem('timeout', 'false');  // No timeout
+
+        // Redirect to result page
+        window.location.href = `result.html`;
     } else {
         message.textContent = "Try Again!";
         message.style.color = "red";
