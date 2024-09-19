@@ -55,15 +55,6 @@ window.onload = function() {
     revealAllNodes(); // Reveal all nodes immediately
 };
 
-// Removed the start button event listener
-
-document.getElementById('undo-btn').addEventListener('click', function() {
-    if (started && currentNodeIndex < degreeSequence.length) {
-        revealNode(currentNodeIndex);
-        currentNodeIndex++;
-    }
-});
-
 document.getElementById('check-btn').addEventListener('click', function() {
     checkDegreeSequence();
 });
@@ -75,6 +66,39 @@ let label;
 let nodes = [];
 let links = [];
 let simulation;
+
+document.getElementById('undo-btn').addEventListener('click', function() {
+    if (links.length > 0) {
+        // Remove the last link from the array
+        const lastLink = links.pop();
+
+        // Decrement the connection count for the nodes involved in the last link
+        lastLink.source.connections--;
+        lastLink.target.connections--;
+
+        // Remove the last link from the DOM
+        d3.selectAll(".links line").filter((d, i) => i === links.length).remove();
+
+        // Rebind the data and update the links
+        link = link.data(links);
+
+        // Enter and append only the new set of links (remaining ones)
+        link = link.enter().append("line").merge(link)
+            .attr("stroke", "#000")
+            .attr("stroke-width", 2);
+
+        // Restart the simulation with the updated links
+        simulation.force("link").links(links);
+        simulation.alpha(1).restart(); // Restart simulation to reflect changes immediately
+
+    } else {
+        alert("No more links to undo!");
+    }
+});
+
+
+
+
 
 function generateGraph(initialDegreeSequence) {
     const width = 800;
@@ -147,10 +171,6 @@ function generateGraph(initialDegreeSequence) {
         node
             .attr("cx", d => d.x)
             .attr("cy", d => d.y);
-
-        label
-            .attr("x", d => d.x)
-            .attr("y", d => d.y);
     }
 
     function dragstarted(event, d) {
@@ -184,7 +204,7 @@ function generateGraph(initialDegreeSequence) {
                 (link.source === d && link.target === selectedNode)
             );
 
-            if ( !linkExists) {
+            if (!linkExists) {
                 // Create a link between selectedNode and clicked node
                 links.push({ source: selectedNode, target: d });
                 selectedNode.connections++;
@@ -199,11 +219,11 @@ function generateGraph(initialDegreeSequence) {
 
                 // Reset node colors
                 d3.selectAll("circle").attr("fill", "#4CAF50");
-            } else if (linkExists) {
+            } else {
                 alert("These two nodes are already connected.");
                 selectedNode = null;
                 d3.selectAll("circle").attr("fill", "#4CAF50");
-            } 
+            }
         }
     }
 
@@ -226,6 +246,7 @@ function generateGraph(initialDegreeSequence) {
 
     updateLinks(); // Initialize link update to draw initial state
 }
+
 
 function revealAllNodes() {
     node.style("visibility", "visible");  // Make all nodes visible
