@@ -1,4 +1,8 @@
 document.getElementById("play-btn").addEventListener('click', function() {
+  // Clear previous game data from localStorage
+  localStorage.removeItem('timeout');
+  localStorage.removeItem('points');
+  
   // Set a 60-second countdown in localStorage
   localStorage.setItem('timer', 30); // Set the initial timer value (in seconds)
   window.location.href = 'index.html'; // Navigate to the game screen
