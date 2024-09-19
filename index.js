@@ -44,6 +44,7 @@ window.onload = function() {
             } else {
                 clearInterval(countdownInterval);
                 // Set timeout flag in localStorage and redirect
+                localStorage.setItem('points', 0);
                 localStorage.setItem('timeout', 'true');
                 window.location.href = `result.html`;
             }
