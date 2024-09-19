@@ -30,9 +30,10 @@ let started = false;
 /* let currentNodeIndex = 0; // Start with the first node */
 
 let countdownInterval;  // Declare countdownInterval globally
+let timeRemaining = 60;  // Store this globally to use when calculating points
 
 window.onload = function() {
-    let timeRemaining = parseInt(localStorage.getItem('timer')) || 60; // Get the initial timer value or default to 60 seconds
+    timeRemaining = parseInt(localStorage.getItem('timer')) || 60; // Get the initial timer value or default to 60 seconds
     const timerElement = document.getElementById("timer");
 
     function startCountdown() {
@@ -282,6 +283,12 @@ function checkDegreeSequence() {
 
         // Stop the timer if the user is correct
         clearInterval(countdownInterval);
+
+        // Calculate points based on remaining time
+        const points = timeRemaining * 10;  // Each second left gives 10 points (adjust scoring as needed)
+
+        // Redirect to result page with points as query parameter
+        window.location.href = `result.html?points=${points}`;
     } else {
         message.textContent = "Try Again!";
         message.style.color = "red";
