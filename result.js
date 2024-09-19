@@ -1,6 +1,6 @@
 // Retrieve the timeout status and points from localStorage
 const timeout = localStorage.getItem('timeout');
-const points = localStorage.getItem('points') || 0;
+const points = localStorage.getItem('points') || 0; // Get current points or default to 0
 
 // Update the header message based on whether the user ran out of time
 if (timeout === 'true') {
