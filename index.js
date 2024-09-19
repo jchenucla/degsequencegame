@@ -30,10 +30,10 @@ let started = false;
 /* let currentNodeIndex = 0; // Start with the first node */
 
 let countdownInterval;  // Declare countdownInterval globally
-let timeRemaining = 60;  // Store this globally to use when calculating points
+let timeRemaining =  localStorage.getItem('timer');;  // Store this globally to use when calculating points
 
 window.onload = function() {
-    timeRemaining = parseInt(localStorage.getItem('timer')) || 60; // Get the initial timer value or default to 60 seconds
+    timeRemaining = parseInt(localStorage.getItem('timer')); // Get the initial timer value or default to 60 seconds
     const timerElement = document.getElementById("timer");
 
     function startCountdown() {
@@ -44,7 +44,6 @@ window.onload = function() {
             } else {
                 clearInterval(countdownInterval);
                 // Set timeout flag in localStorage and redirect
-                localStorage.setItem('points', 0);
                 localStorage.setItem('timeout', 'true');
                 window.location.href = `result.html`;
             }

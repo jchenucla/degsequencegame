@@ -1,10 +1,11 @@
 // Retrieve the timeout status and points from localStorage
 const timeout = localStorage.getItem('timeout');
-const points = localStorage.getItem('points');
+const points = localStorage.getItem('points') || 0;
 
 // Update the header message based on whether the user ran out of time
 if (timeout === 'true') {
     document.querySelector('h1').textContent = "You ran out of time :(";
+    document.querySelector('h3:nth-of-type(1)').textContent = `Points: ${points}`;
 } else {
     document.querySelector('h1').textContent = "You got it!";
     // Display the points only if the user did not run out of time
