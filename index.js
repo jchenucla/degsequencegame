@@ -1,59 +1,70 @@
-// Modal
+// modal
 var modal = document.getElementById("instruction");
 
-// Get the <span> element that closes the modal
+// get the <span> element that closes the modal
 var span = document.getElementsByClassName("close")[0];
 
-// When the user clicks on the button, open the modal
+// open the modal
 document.getElementById('how-to-play-btn').onclick = function() {
   modal.style.display = "block";
 }
 
-// When the user clicks on <span> (x), close the modal
+// close the modal
 span.onclick = function() {
   modal.style.display = "none";
 }
 
-// When the user clicks anywhere outside of the modal, close it
+// when user clicks anywhere outside of the modal, close modal
 window.onclick = function(event) {
   if (event.target == modal) {
     modal.style.display = "none";
   }
 }
 
-
 // Degree Sequence stuff
 
 const degreeSequenceInput = "1,2,3,2";
 let degreeSequence = degreeSequenceInput.split(',').map(Number);
 let started = false;
-/* let currentNodeIndex = 0; // Start with the first node */
 
-let countdownInterval;  // Declare countdownInterval globally
-let timeRemaining =  localStorage.getItem('timer');;  // Store this globally to use when calculating points
+// set timer to 60 seconds
+localStorage.setItem('timer', 60);
+
+let countdownInterval; 
+let timeRemaining =  localStorage.getItem('timer');; 
 
 window.onload = function() {
-    timeRemaining = parseInt(localStorage.getItem('timer')); // Get the initial timer value or default to 60 seconds
+    let storedTime = parseInt(localStorage.getItem('timer'));
+    timeRemaining = (isNaN(storedTime) || storedTime <= 0) ? 60 : storedTime;
+
     const timerElement = document.getElementById("timer");
 
-    function startCountdown() {
+    function formatTime(seconds) {
+        const mins = Math.floor(seconds / 60);
+        const secs = seconds % 60;
+        return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+    }
+
+   function startCountdown() {
+        timerElement.textContent = formatTime(timeRemaining); // display
+
         countdownInterval = setInterval(() => {
             if (timeRemaining > 0) {
                 timeRemaining--;
-                timerElement.textContent = `00:${timeRemaining < 10 ? '0' : ''}${timeRemaining}`; // Update timer display
+                localStorage.setItem('timer', timeRemaining); // update storage, but it'll preserve the time when left the page
+                timerElement.textContent = formatTime(timeRemaining);
             } else {
                 clearInterval(countdownInterval);
-                // Set timeout flag in localStorage and redirect
                 localStorage.setItem('timeout', 'true');
                 window.location.href = `result.html`;
             }
-        }, 1000); // 1000ms = 1 second
+        }, 1000);
     }
 
-    startCountdown(); // Start the timer
-
-    generateGraph(degreeSequence); // Generate the graph
-    revealAllNodes(); // Reveal all nodes immediately
+    startCountdown();
+    generateGraph(degreeSequence);
+    revealAllNodes();
+    label.style("visibility", "visible");
 };
 
 document.getElementById('check-btn').addEventListener('click', function() {
@@ -70,35 +81,29 @@ let simulation;
 
 document.getElementById('undo-btn').addEventListener('click', function() {
     if (links.length > 0) {
-        // Remove the last link from the array
         const lastLink = links.pop();
 
-        // Decrement the connection count for the nodes involved in the last link
         lastLink.source.connections--;
         lastLink.target.connections--;
 
-        // Remove the last link from the DOM
-        d3.selectAll(".links line").filter((d, i) => i === links.length).remove();
+        link = link.data(links, d => `${d.source.id}-${d.target.id}`);
 
-        // Rebind the data and update the links
-        link = link.data(links);
+        // remove old links
+        link.exit().remove();
 
-        // Enter and append only the new set of links (remaining ones)
-        link = link.enter().append("line").merge(link)
+        const linkEnter = link.enter().append("line")
             .attr("stroke", "#000")
             .attr("stroke-width", 2);
 
-        // Restart the simulation with the updated links
+        link = linkEnter.merge(link);
+
         simulation.force("link").links(links);
-        simulation.alpha(1).restart(); // Restart simulation to reflect changes immediately
+        simulation.alpha(1).restart();
 
     } else {
-        alert("No more links to undo!");
+        alert("No more!!");
     }
 });
-
-
-
 
 
 function generateGraph(initialDegreeSequence) {
@@ -114,8 +119,8 @@ function generateGraph(initialDegreeSequence) {
     nodes = initialDegreeSequence.map((degree, index) => ({
         id: index,
         degree: degree,
-        originalDegree: degree, // Keep the original degree for display
-        connections: 0, // Track the number of connections
+        originalDegree: degree, // keep the original degree for display
+        connections: 0, // track the number of connections
         x: width / 2,
         y: height / 2
     }));
@@ -128,7 +133,7 @@ function generateGraph(initialDegreeSequence) {
         .force("center", d3.forceCenter(width / 2, height / 2))
         .force("x", d3.forceX(width / 2).strength(0.1))
         .force("y", d3.forceY(height / 2).strength(0.1))
-        .force("collide", d3.forceCollide(25)) // Prevent nodes from overlapping
+        .force("collide", d3.forceCollide(25)) // prevent nodes from overlapping
         .on("tick", ticked);
 
     link = svg.append("g")
@@ -142,14 +147,14 @@ function generateGraph(initialDegreeSequence) {
         .enter().append("circle")
         .attr("r", 20)
         .attr("fill", "#4CAF50")
-        .style("visibility", "hidden") // Hide all nodes initially
+        .style("visibility", "hidden") // hide all nodes initially
         .on("click", onNodeClick)
         .call(d3.drag()
             .on("start", dragstarted)
             .on("drag", dragged)
             .on("end", dragended));
 
-/*
+
 //number showing on the nodes.
     label = svg.append("g")
         .attr("class", "labels")
@@ -158,21 +163,28 @@ function generateGraph(initialDegreeSequence) {
         .enter().append("text")
         .attr("dy", 4)
         .attr("text-anchor", "middle")
-        .text(d => d.originalDegree)
-        .style("visibility", "hidden"); // Hide all labels initially
-*/
+        .text(d => d.connections)  // initial text shows current connections
+        .style("pointer-events", "none"); // so clicks pass through labels
+
+
 
     function ticked() {
-        link
-            .attr("x1", d => d.source.x)
-            .attr("y1", d => d.source.y)
-            .attr("x2", d => d.target.x)
-            .attr("y2", d => d.target.y);
+    link
+        .attr("x1", d => d.source.x)
+        .attr("y1", d => d.source.y)
+        .attr("x2", d => d.target.x)
+        .attr("y2", d => d.target.y);
 
-        node
-            .attr("cx", d => d.x)
-            .attr("cy", d => d.y);
-    }
+    node
+        .attr("cx", d => d.x)
+        .attr("cy", d => d.y);
+
+    label
+        .attr("x", d => d.x)
+        .attr("y", d => d.y)
+        .text(d => d.connections);  // update label text dynamically
+}
+
 
     function dragstarted(event, d) {
         if (!event.active) simulation.alphaTarget(0.3).restart();
@@ -229,12 +241,20 @@ function generateGraph(initialDegreeSequence) {
     }
 
     function updateLinks() {
-        link = link.data(links);
+        console.log("Updating links, current links length:", links.length);
+    
+        link = link.data(links, d => `${d.source.id}-${d.target.id}`);
         link.exit().remove();
-        link = link.enter().append("line").merge(link)
+
+        let enter = link.enter().append("line")
             .attr("stroke", "#000")
             .attr("stroke-width", 2);
-    }
+
+        link = enter.merge(link);
+
+        console.log("Number of lines in DOM after update:", document.querySelectorAll(".links line").length);
+    }   
+
 
     simulation.on("tick", () => {
         nodes.forEach(d => {
